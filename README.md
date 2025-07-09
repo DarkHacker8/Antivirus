@@ -1,14 +1,31 @@
-This program is a simple Python script that performs static analysis of a text file for potentially dangerous or suspicious code structures. It is not a full-fledged antivirus, but it can help identify signs of malicious behavior in scripts or configuration files.
-
 How does it work?
-The user enters the path to the file for verification. The program opens the file and reads its contents line by line.
 
-Ignored when reading:
-Multi-line comments in the style of /* ... */
-Single-line comments starting with #, //, <!--
-For each line, the presence of regular expressions (patterns) that correspond to dangerous or suspicious actions is checked (for example, deleting files from rm -rf, changing access rights to chmod 777, uploading files via wget or curl, executing code via eval or exec, leaking passwords and tokens, etc.). If the line matches one from the patterns, it is displayed on the screen indicating the level of danger (CRITICAL, HIGH, MEDIUM) and a brief description.
-The program warns if the file is a symbolic link or if there are no permissions to read the file.
-File processing is implemented taking into account large sizes (streaming reading) and possible errors (missing file, encoding errors, memory errors).
+Here are the main stages of the program (based on the provided code):
+
+Importing libraries:
+Standard Python libraries are used: os, pathlib, platform, re.
+
+Checking the file:
+Determines the actual path to the file (takes into account symbolic links).
+Checks whether the program has the rights to read the file.
+Warns you if the file is a symlink.
+
+File streaming:
+The file is read line by line, which allows you to process even very large files without loading them completely into memory.
+
+Comment processing:
+The program can skip both single-line (#, //) and multi-line (/* ... */) comments, so as not to analyze their contents.
+
+Search for patterns:
+To search for malicious code, regular expressions (patterns) are used, which are passed to the function.
+All unique strings that match these patterns are saved.
+
+Output of results:
+If something suspicious is found, the program informs the user about it.
 
 What can she do?
-Analyze text files (for example, scripts, configs) for potentially dangerous commands or constructions. Help you quickly find traces of malicious or risky operations in your code or configurations. Work on different operating systems (Windows, Linux, etc.), clearing the screen before launching and using cross-platform file management methods. Warn about problems with accessing the file and the specifics of its location (symbolic links).
+
+Scan files for malicious or suspicious lines of code according to specified patterns.
+Ignore comments in the code so that there are no false positives.
+Work with large files without the risk of "overflowing" memory.
+Check access rights and process symlinks correctly.
